@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import { Divider, makeStyles, tokens } from '@fluentui/react-components';
+import { TextBoldRegular, TextBulletListRegular, TextItalicRegular, TextNumberListLtrRegular, } from '@fluentui/react-icons';
 import Placeholder from '@tiptap/extension-placeholder';
-import { makeStyles, tokens, Button, Divider } from '@fluentui/react-components';
-import {
-  TextBoldRegular,
-  TextItalicRegular,
-  TextBulletListRegular,
-  TextNumberListLtrRegular,
-} from '@fluentui/react-icons';
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import React, { useEffect } from 'react';
+import { EditorToolbarButton } from './EditorToolbarButton';
 
 const useStyles = makeStyles({
   wrapper: {
@@ -94,30 +90,14 @@ export const RichTextEditor: React.FunctionComponent<RichTextEditorProps> = ({
     }
   }, [value, editor]);
 
+  const boldActive = React.useMemo(() => editor?.isActive('bold'), [editor]);
+  const italicActive = React.useMemo(() => editor?.isActive('italic'), [editor]);
+  const bulletListActive = React.useMemo(() => editor?.isActive('bulletList'), [editor]);
+  const orderedListActive = React.useMemo(() => editor?.isActive('orderedList'), [editor]);
+
   if (!editor) return null;
 
-  const ToolbarButton = ({
-    active,
-    onClick,
-    icon,
-    title,
-  }: {
-    active: boolean;
-    onClick: () => void;
-    icon: React.ReactElement;
-    title: string;
-  }) => (
-    <Button
-      appearance={active ? 'primary' : 'subtle'}
-      size="small"
-      icon={icon}
-      title={title}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick();
-      }}
-    />
-  );
+
 
   return (
     <div
@@ -126,27 +106,27 @@ export const RichTextEditor: React.FunctionComponent<RichTextEditorProps> = ({
       onBlur={() => setFocused(false)}
     >
       <div className={styles.toolbar}>
-        <ToolbarButton
-          active={editor.isActive('bold')}
+        <EditorToolbarButton
+          active={boldActive}
           onClick={() => editor.chain().focus().toggleBold().run()}
           icon={<TextBoldRegular />}
           title="Fett"
         />
-        <ToolbarButton
-          active={editor.isActive('italic')}
+        <EditorToolbarButton
+          active={italicActive}
           onClick={() => editor.chain().focus().toggleItalic().run()}
           icon={<TextItalicRegular />}
           title="Kursiv"
         />
         <Divider vertical style={{ height: '20px', margin: '0 4px' }} />
-        <ToolbarButton
-          active={editor.isActive('bulletList')}
+        <EditorToolbarButton
+          active={bulletListActive}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           icon={<TextBulletListRegular />}
           title="Aufzählung"
         />
-        <ToolbarButton
-          active={editor.isActive('orderedList')}
+        <EditorToolbarButton
+          active={orderedListActive}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           icon={<TextNumberListLtrRegular />}
           title="Nummerierte Liste"

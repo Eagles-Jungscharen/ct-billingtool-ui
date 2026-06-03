@@ -8,7 +8,7 @@ export const createRechnungsprofil = async (
   token: string,
   data: CreateUpdateRechnungsprofilData,
 ): Promise<RechnungsprofilDto> =>
-  authFetch<RechnungsprofilDto>('/api/admin/invoice-profiles', token, {
+  authFetch<RechnungsprofilDto>('/api/invoice-management/invoice-profiles', token, {
     method: 'POST',
     body: JSON.stringify(data),
   });
@@ -18,10 +18,10 @@ export const updateRechnungsprofil = async (
   id: string,
   data: CreateUpdateRechnungsprofilData,
 ): Promise<RechnungsprofilDto> =>
-  authFetch<RechnungsprofilDto>(`/api/admin/invoice-profiles/${id}`, token, {
+  authFetch<RechnungsprofilDto>(`/api/invoice-management/invoice-profiles/${id}`, token, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 
 export const deleteRechnungsprofil = async (token: string, id: string): Promise<void> =>
-  authFetch<void>(`/api/admin/invoice-profiles/${id}`, token, { method: 'DELETE' });
+  authFetch<void>(`/api/invoice-management/invoice-profiles/${id}`, token, { method: 'DELETE' });
