@@ -150,6 +150,9 @@ const formatCHF = (amount: number) =>
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString('de-CH');
 
+const stripHtml = (html: string): string =>
+  html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
 interface PdfDocProps {
   rechnung: RechnungDto
   profil: RechnungsprofilDto | undefined
@@ -176,7 +179,7 @@ const InvoicePdfDocument: React.FunctionComponent<PdfDocProps> = ({ rechnung, pr
           </View>
           <View>
             <PdfText style={pdfStyles.rechnungsnummer}>Rechnung {rechnung.rechnungsnummer}</PdfText>
-            <PdfText style={pdfStyles.rechnungsMeta}>Datum: {formatDate(rechnung.createdAt)}</PdfText>
+            <PdfText style={pdfStyles.rechnungsMeta}>Datum: {rechnung.rechnungsDatum ? formatDate(rechnung.rechnungsDatum) : formatDate(rechnung.createdAt)}</PdfText>
           </View>
         </View>
 
@@ -193,7 +196,7 @@ const InvoicePdfDocument: React.FunctionComponent<PdfDocProps> = ({ rechnung, pr
         {/* Titel & Beschreibung */}
         <PdfText style={pdfStyles.titel}>{rechnung.titel}</PdfText>
         {rechnung.beschreibung && (
-          <PdfText style={pdfStyles.beschreibung}>{rechnung.beschreibung}</PdfText>
+          <PdfText style={pdfStyles.beschreibung}>{stripHtml(rechnung.beschreibung)}</PdfText>
         )}
 
         {/* Tabelle */}

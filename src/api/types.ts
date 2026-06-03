@@ -42,6 +42,7 @@ export interface RechnungDto {
   titel: string
   beschreibung?: string
   status: RechnungStatus
+  rechnungsDatum?: string
   empfaengerName: string
   empfaengerStrasse: string
   empfaengerHausnummer: string

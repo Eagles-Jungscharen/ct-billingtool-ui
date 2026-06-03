@@ -80,6 +80,15 @@ export const InvoiceList: React.FunctionComponent = () => {
       renderCell: (item) => item.rechnungsnummer,
     }),
     createTableColumn<RechnungDto>({
+      columnId: 'rechnungsDatum',
+      compare: (a, b) => (a.rechnungsDatum ?? '').localeCompare(b.rechnungsDatum ?? ''),
+      renderHeaderCell: () => 'Datum',
+      renderCell: (item) =>
+        item.rechnungsDatum
+          ? new Date(item.rechnungsDatum).toLocaleDateString('de-CH')
+          : '—',
+    }),
+    createTableColumn<RechnungDto>({
       columnId: 'titel',
       compare: (a, b) => a.titel.localeCompare(b.titel),
       renderHeaderCell: () => 'Titel',

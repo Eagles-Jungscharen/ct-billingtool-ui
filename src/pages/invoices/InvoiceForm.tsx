@@ -7,11 +7,11 @@ import {
   Button,
   Field,
   Input,
-  Textarea,
   Select,
   Spinner,
   Divider,
 } from '@fluentui/react-components';
+import { RichTextEditor } from '../../components/RichTextEditor';
 import {
   SaveRegular,
   ArrowLeftRegular,
@@ -111,6 +111,7 @@ export const InvoiceForm: React.FunctionComponent = () => {
     titel: '',
     beschreibung: '',
     status: 'entwurf',
+    rechnungsDatum: new Date().toISOString().split('T')[0],
     empfaengerName: '',
     empfaengerStrasse: '',
     empfaengerHausnummer: '',
@@ -127,6 +128,7 @@ export const InvoiceForm: React.FunctionComponent = () => {
         titel: existing.titel,
         beschreibung: existing.beschreibung ?? '',
         status: existing.status,
+        rechnungsDatum: existing.rechnungsDatum ?? new Date().toISOString().split('T')[0],
         empfaengerName: existing.empfaengerName,
         empfaengerStrasse: existing.empfaengerStrasse,
         empfaengerHausnummer: existing.empfaengerHausnummer,
@@ -218,11 +220,19 @@ export const InvoiceForm: React.FunctionComponent = () => {
       {/* Stammdaten */}
       <div className={styles.section}>
         <Text className={styles.sectionTitle}>Stammdaten</Text>
-        <div className={styles.gridThree}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px' }}>
           <Field label="Rechnungsnummer" required>
             <Input
               value={form.rechnungsnummer}
               onChange={(_, d) => setField('rechnungsnummer', d.value)}
+              required
+            />
+          </Field>
+          <Field label="Rechnungsdatum" required>
+            <Input
+              type="date"
+              value={form.rechnungsDatum ?? ''}
+              onChange={(_, d) => setField('rechnungsDatum', d.value)}
               required
             />
           </Field>
@@ -249,7 +259,7 @@ export const InvoiceForm: React.FunctionComponent = () => {
             </Select>
           </Field>
         </div>
-        <div className={styles.grid} style={{ marginTop: '16px' }}>
+        <div style={{ marginTop: '16px' }}>
           <Field label="Titel" required>
             <Input
               value={form.titel}
@@ -257,11 +267,12 @@ export const InvoiceForm: React.FunctionComponent = () => {
               required
             />
           </Field>
+        </div>
+        <div style={{ marginTop: '16px' }}>
           <Field label="Beschreibung">
-            <Textarea
-              value={form.beschreibung}
-              onChange={(_, d) => setField('beschreibung', d.value)}
-              rows={2}
+            <RichTextEditor
+              value={form.beschreibung ?? ''}
+              onChange={(html) => setField('beschreibung', html)}
             />
           </Field>
         </div>
